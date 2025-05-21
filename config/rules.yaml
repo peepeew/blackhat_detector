@@ -1,0 +1,6 @@
+# 规则配置示例：每分钟请求次数阈值
+rules:
+  - name: high_freq_login
+    type: frequency
+    threshold_per_minute: 10
+    whitelist: ./config/whitelist.txt
