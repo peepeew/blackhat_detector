@@ -4,3 +4,21 @@ rules:
     type: frequency
     threshold_per_minute: 10
     whitelist: ./config/whitelist.txt
+
+  - name: path_probe_freq
+    type: path_probe_freq
+    sensitive_paths:
+      - /admin
+      - /login
+      - /phpmyadmin
+    threshold: 10
+    whitelist: ./config/whitelist.txt
+
+  - name: path_probe_detect
+    type: path_probe
+    sensitive_paths:
+      - /admin
+      - /login
+      - /phpmyadmin
+    threshold: 3
+    whitelist: ./config/whitelist.txt
