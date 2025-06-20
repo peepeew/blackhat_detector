@@ -1,8 +1,8 @@
-# 规则配置示例：每分钟请求次数阈值
 rules:
   - name: high_freq_login
     type: frequency
     threshold_per_minute: 10
+    target_path: /login
     whitelist: ./config/whitelist.txt
 
   - name: path_probe_freq
@@ -12,6 +12,7 @@ rules:
       - /login
       - /phpmyadmin
     threshold: 10
+    window_seconds: 60
     whitelist: ./config/whitelist.txt
 
   - name: path_probe_detect
@@ -21,4 +22,28 @@ rules:
       - /login
       - /phpmyadmin
     threshold: 3
+    whitelist: ./config/whitelist.txt
+
+  - name: ua_anomaly
+    type: ua_check
+    bad_ua_keywords:
+      - curl
+      - python-requests
+    threshold: 3  # 某 IP 使用 bad_ua 的次数超过该值即判定异常
+    whitelist: ./config/whitelist.txt
+
+  - name: referer_mismatch
+    type: referer_check
+    target_path: /login
+    expected_referers:
+      - https://www.google.com/
+      - https://baidu.com/search
+    allow_empty: false
+    threshold: 5  # 某 IP 非预期 referer 访问该路径超过 5 次即异常
+    whitelist: ./config/whitelist.txt
+
+  - name: slow_request_detector
+    type: slow_request
+    threshold_seconds: 1.0  # 超过 1s 认为是慢请求
+    count_threshold: 5      # 某 IP 有 5 次慢请求则标记
     whitelist: ./config/whitelist.txt
